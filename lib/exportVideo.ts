@@ -194,7 +194,8 @@ export async function exportVideo(
           `trim=duration=${duration},` +
           `setpts=PTS-STARTPTS,` +
           `scale=${resolution.width}:${resolution.height}:force_original_aspect_ratio=decrease,` +
-          `pad=${resolution.width}:${resolution.height}:(ow-iw)/2:(oh-ih)/2`;
+          `pad=${resolution.width}:${resolution.height}:(ow-iw)/2:(oh-ih)/2,` +
+          `setsar=1[v${i}]`;
       } else {
         const trimStart = clip.trimStart || 0;
         const trimEnd = clip.trimEnd || asset.duration || clip.duration;
@@ -203,7 +204,8 @@ export async function exportVideo(
           `setpts=PTS-STARTPTS,` +
           `fps=30,` +
           `scale=${resolution.width}:${resolution.height}:force_original_aspect_ratio=decrease,` +
-          `pad=${resolution.width}:${resolution.height}:(ow-iw)/2:(oh-ih)/2`;
+          `pad=${resolution.width}:${resolution.height}:(ow-iw)/2:(oh-ih)/2,` +
+          `setsar=1[v${i}]`;
       }
       if (fadeIn > 0) {
         filterChain += `,fade=t=in:st=0:d=${fadeIn}`;
@@ -213,7 +215,6 @@ export async function exportVideo(
         filterChain += `,fade=t=out:st=${fadeOutStart}:d=${fadeOut}`;
       }
       
-      filterChain += `[v${i}]`;
       filterParts.push(filterChain);
       videoInputs.push(`[v${i}]`);
     }
@@ -243,7 +244,7 @@ export async function exportVideo(
       const extensionDuration = audioDuration - videoDuration;
       const fadeOutDuration = Math.min(1.0, extensionDuration);
       console.log(`Audio is ${extensionDuration}s longer than video. Fading to black and extending.`);
-      filterParts.push(`color=c=black:s=${resolution.width}x${resolution.height}:d=${extensionDuration}:r=30[black]`);
+      filterParts.push(`color=c=black:s=${resolution.width}x${resolution.height}:d=${extensionDuration}:r=30,setsar=1[black]`);
       filterParts.push(`[vidout]fade=t=out:st=${videoDuration - fadeOutDuration}:d=${fadeOutDuration}[vidfaded]`);
       filterParts.push(`[vidfaded][black]concat=n=2:v=1:a=0[vidout]`);
     }
