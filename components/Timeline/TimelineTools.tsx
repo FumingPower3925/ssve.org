@@ -36,7 +36,7 @@ export function TimelineTools() {
   const handleSpeedChange = () => {
     if (selectedClip) {
       const newDuration = (selectedClip.trimEnd - selectedClip.trimStart) / speed;
-      updateClip(selectedClip.id, { duration: newDuration });
+      updateClip(selectedClip.id, { duration: newDuration, speed });
       setShowSpeedDialog(false);
     }
   };

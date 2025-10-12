@@ -28,6 +28,7 @@ export interface TimelineClip {
   muted?: boolean;
   fadeIn?: number;
   fadeOut?: number;
+  speed?: number;
 }
 
 export interface Track {

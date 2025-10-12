@@ -20,7 +20,7 @@ export function PreviewWindow() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [currentClipUrl, setCurrentClipUrl] = useState<string>('');
   const [currentClipType, setCurrentClipType] = useState<'video' | 'image' | null>(null);
